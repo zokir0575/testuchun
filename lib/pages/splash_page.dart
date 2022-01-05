@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_instaclone/pages/home_page.dart';
-import 'package:flutter_instaclone/pages/signin_page.dart';
-import 'package:flutter_instaclone/services/prefs_service.dart';
+
 class SplashPage extends StatefulWidget {
   const SplashPage({Key key}) : super(key: key);
  static final String id = "splash_page";

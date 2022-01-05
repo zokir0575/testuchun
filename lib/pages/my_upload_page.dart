@@ -1,4 +1,6 @@
 
+// ignore_for_file: must_be_immutable, invalid_use_of_visible_for_testing_member
+
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -84,7 +86,7 @@ class _MyUploadPageState extends State<MyUploadPage> {
 
   void _respStorePost(String downloadUrl){
     String caption = captionController.text.toString().trim();
-    Post post = new Post(caption: caption, img_post: downloadUrl);
+    Post post = new Post(caption: caption, imgPost: downloadUrl);
     _apiStorePost(post);
   }
 

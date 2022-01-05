@@ -43,7 +43,7 @@ class _SignUpPageState extends State<SignUpPage> {
     setState(() {
       isLoading = true;
     });
-    User user = new User(fullname: name, email: email, password: password);
+    User user = new User(fullName: name, email: email, password: password);
     AuthService.signUpUser(context, name, email, password).then((
         value) =>
     {

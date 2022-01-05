@@ -1,10 +1,12 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_icons/flutter_icons.dart';
 import 'package:flutter_instaclone/model/post_model.dart';
 import 'package:flutter_instaclone/services/data_service.dart';
 import 'package:flutter_instaclone/services/utils_service.dart';
+
 class MyFeedPage extends StatefulWidget {
   PageController pageController;
   MyFeedPage({this.pageController, pagecontroller});
@@ -125,7 +127,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(post.fullname, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                        Text(post.fullName, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                         Text(post.date, style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal),),
                       ],
                     ),
@@ -145,7 +147,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
           CachedNetworkImage(
             width:  MediaQuery.of(context).size.width,
             height:  MediaQuery.of(context).size.width,
-            imageUrl: post.img_post,
+            imageUrl: post.imgPost,
             placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
             errorWidget: (context, url, error) => Icon(Icons.error),
             fit: BoxFit.cover,

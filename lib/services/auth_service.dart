@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_instaclone/model/user_model.dart';
 import 'package:flutter_instaclone/pages/signin_page.dart';
 import 'package:flutter_instaclone/services/prefs_service.dart';
 

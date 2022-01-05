@@ -1,4 +1,6 @@
 
+// ignore_for_file: deprecated_member_use
+
 import 'dart:io';
 
 import 'package:device_info/device_info.dart';
@@ -84,21 +86,21 @@ class Utils {
   static Future<Map<String, String>>  deviceParams() async{
     Map<String, String> params = new Map();
     var deviceInfo = DeviceInfoPlugin();
-    String fcm_token = await Prefs.loadFCM();
+    String fcmToken = await Prefs.loadFCM();
 
     if (Platform.isIOS) {
       var iosDeviceInfo = await deviceInfo.iosInfo;
       params.addAll({
         'device_id': iosDeviceInfo.identifierForVendor,
         'device_type': "I",
-        'device_token': fcm_token,
+        'device_token': fcmToken,
       });
     } else {
       var androidDeviceInfo = await deviceInfo.androidInfo;
       params.addAll({
         'device_id': androidDeviceInfo.androidId,
         'device_type': "A",
-        'device_token': fcm_token,
+        'device_token': fcmToken,
       });
     }
     return params;

@@ -111,7 +111,7 @@ class _MyLikesPageState extends State<MyLikesPage> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(post.fullname, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                        Text(post.fullName, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                         Text( post.date, style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal),),
                       ],
                     ),
@@ -130,7 +130,7 @@ class _MyLikesPageState extends State<MyLikesPage> {
           CachedNetworkImage(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width,
-            imageUrl: post.img_post,
+            imageUrl: post.imgPost,
             placeholder: (context, url) => CircularProgressIndicator(),
             errorWidget: (context, url, error) => Icon(Icons.error),
           ),          //#like share

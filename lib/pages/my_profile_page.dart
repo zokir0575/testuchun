@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_testing_member
+
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -19,11 +21,11 @@ class MyProfilePAge extends StatefulWidget {
 class _MyProfilePAgeState extends State<MyProfilePAge> {
   bool isLoading = false;
   int axisCount = 1;
-  String fullname = "", email = "", img_url = "";
+  String fullName = "", email = "", imgUrl = "";
   List<Post> items = [];
-  int count_posts = 0;
-  int count_followers = 0;
-  int count_followings = 0;
+  int countPosts = 0;
+  int countFollowers = 0;
+  int countFollowings = 0;
   @override
   void initState() {
     // TODO: implement initState
@@ -95,7 +97,7 @@ class _MyProfilePAgeState extends State<MyProfilePAge> {
 
   void _apiUpdateUser(String downloadUrl) async{
     User user = await DataService.loadUser();
-    user.img_url = downloadUrl;
+    user.imgUrl = downloadUrl;
     await DataService.updateUser(user);
     _apiloadUser();
   }
@@ -123,11 +125,11 @@ class _MyProfilePAgeState extends State<MyProfilePAge> {
   void _showUserInfo(User user){
     setState(() {
       isLoading = false;
-      this.fullname = user.fullname;
+      this.fullName = user.fullName;
       this.email = user.email;
-      this.img_url = user.img_url;
-      this.count_followers = user.followers_count;
-      this.count_followings = user.following_count;
+      this.imgUrl = user.imgUrl;
+      this.countFollowers = user.followersCount;
+      this.countFollowings = user.followingCount;
     });
   }
 
@@ -139,7 +141,7 @@ class _MyProfilePAgeState extends State<MyProfilePAge> {
   void _respLoadPosts(List<Post> posts){
     setState(() {
       items = posts;
-      count_posts = items.length;
+      countPosts = items.length;
     });
   }
 
@@ -188,13 +190,13 @@ class _MyProfilePAgeState extends State<MyProfilePAge> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(35),
-                          child: img_url == null || img_url.isEmpty ?Image(
+                          child: imgUrl == null || imgUrl.isEmpty ?Image(
                             image: AssetImage("assets/images/ic_person.png"),
                             height: 70,
                             width: 70,
                             fit: BoxFit.cover,
                           ) : Image.network(
-                            img_url,
+                            imgUrl,
                             width: 70,
                             height: 70,
                             fit: BoxFit.cover,
@@ -219,7 +221,7 @@ class _MyProfilePAgeState extends State<MyProfilePAge> {
 
                 //#my infos
                 SizedBox(height: 10,),
-                Text(fullname.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),),
+                Text(fullName.toUpperCase(), style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),),
                 SizedBox(height: 3,),
                 Text(email, style: TextStyle(color: Colors.black54, fontSize: 14, fontWeight: FontWeight.normal),),
                 SizedBox(height: 10,),
@@ -231,7 +233,7 @@ class _MyProfilePAgeState extends State<MyProfilePAge> {
                       child: Center(
                         child: Column(
                           children: [
-                            Text(count_posts.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),),
+                            Text(countPosts.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),),
                             SizedBox(height: 5,),
                             Text("POSTS", style: TextStyle(color: Colors.black54, fontSize: 14, fontWeight: FontWeight.normal),),
                           ],
@@ -243,7 +245,7 @@ class _MyProfilePAgeState extends State<MyProfilePAge> {
                       child: Center(
                         child: Column(
                           children: [
-                            Text(count_followers.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),),
+                            Text(countFollowers.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),),
                             SizedBox(height: 5,),
                             Text("FOLLOWERS", style: TextStyle(color: Colors.black54, fontSize: 14, fontWeight: FontWeight.normal),),
                           ],
@@ -255,7 +257,7 @@ class _MyProfilePAgeState extends State<MyProfilePAge> {
                       child: Center(
                         child: Column(
                           children: [
-                            Text(count_followings.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),),
+                            Text(countFollowings.toString(), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),),
                             SizedBox(height: 5,),
                             Text("FOLLOWINGS", style: TextStyle(color: Colors.black54, fontSize: 14, fontWeight: FontWeight.normal),),
                           ],
@@ -334,7 +336,7 @@ class _MyProfilePAgeState extends State<MyProfilePAge> {
               child: CachedNetworkImage(
 
                 width: double.infinity,
-                imageUrl: post.img_post,
+                imageUrl: post.imgPost,
                 placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
                 errorWidget: (context, url, error) => Icon(Icons.error),
                 fit: BoxFit.cover,

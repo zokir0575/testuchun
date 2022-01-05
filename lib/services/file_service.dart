@@ -5,13 +5,13 @@ import 'package:flutter_instaclone/services/prefs_service.dart';
 
 class FileService {
   static final _storage = FirebaseStorage.instance.ref();
-  static final folder_post = "post_images";
-  static final folder_user = "user_images";
+  static final folderPost = "post_images";
+  static final folderUser = "user_images";
 
   static Future<String> uploadUserImage(File _image) async {
     String uid = await Prefs.loadUserId();
-    String img_name = uid;
-    StorageReference firebaseStorageRef = _storage.child(folder_user).child(img_name);
+    String imgName = uid;
+    StorageReference firebaseStorageRef = _storage.child(folderUser).child(imgName);
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     if (taskSnapshot != null) {
@@ -24,8 +24,8 @@ class FileService {
 
   static Future<String> uploadPostImage(File _image) async {
     String uid = await Prefs.loadUserId();
-    String img_name = uid +"_" + DateTime.now().toString();
-    StorageReference firebaseStorageRef = _storage.child(folder_post).child(img_name);
+    String imgName = uid +"_" + DateTime.now().toString();
+    StorageReference firebaseStorageRef = _storage.child(folderPost).child(imgName);
     StorageUploadTask uploadTask = firebaseStorageRef.putFile(_image);
     StorageTaskSnapshot taskSnapshot = await uploadTask.onComplete;
     if (taskSnapshot != null) {

@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_instaclone/model/user_model.dart';
 import 'package:flutter_instaclone/pages/home_page.dart';
 import 'package:flutter_instaclone/pages/signup_page.dart';
 import 'package:flutter_instaclone/services/auth_service.dart';
 import 'package:flutter_instaclone/services/prefs_service.dart';
 import 'package:flutter_instaclone/services/utils_service.dart';
+
 class SignInPage extends StatefulWidget {
   const SignInPage({Key key}) : super(key: key);
   static final String id = "signIn_page";
@@ -22,9 +22,9 @@ class _SignInPageState extends State<SignInPage> {
     Navigator.pushReplacementNamed(context, SignUpPage.id);
   }
 
-  _callHomePage() {
-    Navigator.pushReplacementNamed(context, HomePage.id);
-  }
+  // _callHomePage() {
+  //   Navigator.pushReplacementNamed(context, HomePage.id);
+  // }
 
   _doSignIn() {
     String email = emailController.text.toString().trim();
