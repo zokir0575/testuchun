@@ -143,13 +143,13 @@ Widget _itemOfUser(User user){
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(22.5),
-            child: user.imgUrl.isEmpty ? Image(
+            child: user.img_url.isEmpty ? Image(
               image: AssetImage("assets/images/ic_person.png"),
               width: 45,
               height: 45,
               fit: BoxFit.cover,
             ): Image.network(
-              user.imgUrl,
+              user.img_url,
               width: 45,
               height: 45,
               fit: BoxFit.cover,

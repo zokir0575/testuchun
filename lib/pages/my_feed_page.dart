@@ -147,7 +147,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
           CachedNetworkImage(
             width:  MediaQuery.of(context).size.width,
             height:  MediaQuery.of(context).size.width,
-            imageUrl: post.imgPost,
+            imageUrl: post.img_post,
             placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
             errorWidget: (context, url, error) => Icon(Icons.error),
             fit: BoxFit.cover,

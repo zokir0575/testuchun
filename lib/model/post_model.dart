@@ -1,23 +1,23 @@
 class Post{
   String uid;
-  String imgUser;
+  String img_user;
   String fullName;
   String id;
-  String imgPost;
+  String img_post;
   String caption;
   String date;
   bool liked = false;
 
   bool mine = false;
 
-  Post({this.caption, this.imgPost});
+  Post({this.caption, this.img_post});
 
   Post.fromJson(Map<String, dynamic> json)
   : uid = json["uid"],
     fullName = json["fullname"],
-    imgUser = json["img_user"],
+    img_user = json["img_user"],
     id = json["id"],
-    imgPost = json["img_post"],
+    img_post = json["img_post"],
     caption = json["caption"],
     date = json["date"],
     liked = json["liked"];
@@ -25,9 +25,9 @@ class Post{
   Map<String, dynamic> toJson() =>{
     "uid" : uid,
     "fullname" : fullName,
-    "img_user" : imgUser,
+    "img_user" : img_user,
     "id" : id,
-    "img_post" : imgPost,
+    "img_post" : img_post,
     "caption" : caption,
     "date" : date,
     "liked" : liked,

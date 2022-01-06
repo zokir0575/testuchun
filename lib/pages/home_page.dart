@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
           MySearchPage(),
           MyUploadPage(pageController: _pageController),
           MyLikesPage(),
-          MyProfilePAge(),
+          MyProfilePage(),
         ],
         onPageChanged: (int index){
           setState(() {

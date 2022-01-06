@@ -86,7 +86,7 @@ class _MyUploadPageState extends State<MyUploadPage> {
 
   void _respStorePost(String downloadUrl){
     String caption = captionController.text.toString().trim();
-    Post post = new Post(caption: caption, imgPost: downloadUrl);
+    Post post = new Post(caption: caption, img_post: downloadUrl);
     _apiStorePost(post);
   }
 

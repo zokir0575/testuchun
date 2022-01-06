@@ -3,7 +3,7 @@ class User {
   String fullName = "";
   String email = "";
   String password = "";
-  String imgUrl = "";
+  String img_url = "";
 
   String deviceId = "";
   String deviceType = "";
@@ -20,7 +20,7 @@ class User {
         fullName = json['fullname'],
         email = json['email'],
         password = json['password'],
-        imgUrl = json['img_url'],
+        img_url = json['img_url'],
         deviceId = json['device_id'],
         deviceType = json['device_type'],
         deviceToken = json['device_token'];
@@ -30,7 +30,7 @@ class User {
         'fullname': fullName,
         'email': email,
         'password': password,
-        'img_url': imgUrl,
+        'img_url': img_url,
         'device_id': deviceId,
         'device_type': deviceType,
         'device_token': deviceToken,

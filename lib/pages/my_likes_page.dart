@@ -130,7 +130,7 @@ class _MyLikesPageState extends State<MyLikesPage> {
           CachedNetworkImage(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width,
-            imageUrl: post.imgPost,
+            imageUrl: post.img_post,
             placeholder: (context, url) => CircularProgressIndicator(),
             errorWidget: (context, url, error) => Icon(Icons.error),
           ),          //#like share
