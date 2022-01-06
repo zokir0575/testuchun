@@ -21,9 +21,9 @@ class DataService {
     Map<String, String> params = await Utils.deviceParams();
     print(params.toString());
 
-    user.deviceId = params["device_id"];
-    user.deviceType = params["device_type"];
-    user.deviceToken = params["device_token"];
+    user.device_id = params["device_id"];
+    user.device_type = params["device_type"];
+    user.device_token = params["device_token"];
 
     return _firestore.collection(folder_users).document(user.uid).setData(user.toJson());
   }
@@ -34,10 +34,10 @@ class DataService {
     User user = User.fromJson(value.data);
 
     var querySnapshot1 = await _firestore.collection(folder_users).document(uid).collection(folder_followers).getDocuments();
-    user.followersCount = querySnapshot1.documents.length;
+    user.followers_count = querySnapshot1.documents.length;
 
     var querySnapshot2 = await _firestore.collection(folder_users).document(uid).collection(folder_following).getDocuments();
-    user.followingCount = querySnapshot2.documents.length;
+    user.following_count = querySnapshot2.documents.length;
 
     return user;
   }
@@ -84,7 +84,7 @@ class DataService {
   static Future<Post> storePost(Post post) async {
     User me = await loadUser();
     post.uid = me.uid;
-    post.fullName = me.fullName;
+    post.fullname = me.fullname;
     post.img_user = me.img_url;
     post.date = Utils.currentDate();
 

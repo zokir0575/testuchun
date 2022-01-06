@@ -21,8 +21,8 @@ class _SignInPageState extends State<SignInPage> {
   _callSignUpPage() {
     Navigator.pushReplacementNamed(context, SignUpPage.id);
   }
-
-  // _callHomePage() {
+  //
+  //  _callHomePage() {
   //   Navigator.pushReplacementNamed(context, HomePage.id);
   // }
 

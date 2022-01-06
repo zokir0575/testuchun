@@ -23,6 +23,7 @@ class FileService {
     return null;
   }
 
+
   static Future<String> uploadPostImage(File _image) async {
     String uid = await Prefs.loadUserId();
     String img_name = uid +"_" + DateTime.now().toString();

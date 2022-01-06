@@ -5,9 +5,10 @@ import 'package:flutter_instaclone/pages/my_likes_page.dart';
 import 'package:flutter_instaclone/pages/my_profile_page.dart';
 import 'package:flutter_instaclone/pages/my_search_page.dart';
 import 'package:flutter_instaclone/pages/my_upload_page.dart';
+
 class HomePage extends StatefulWidget {
-  const HomePage({Key key}) : super(key: key);
- static final String id = "home_page";
+  static final String id = "home_page";
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -40,12 +41,11 @@ class _HomePageState extends State<HomePage> {
         onPageChanged: (int index){
           setState(() {
             _currentTap = index;
-
           });
         },
       ),
+
       bottomNavigationBar: CupertinoTabBar(
-        currentIndex: _currentTap ,
         onTap: (int index){
           setState(() {
             _currentTap = index;
@@ -53,6 +53,7 @@ class _HomePageState extends State<HomePage> {
                 duration: Duration(milliseconds: 200), curve: Curves.easeIn);
           });
         },
+        currentIndex: _currentTap,
         activeColor: Color.fromRGBO(193, 53, 132, 1),
         items: [
           BottomNavigationBarItem(
@@ -81,10 +82,10 @@ class _HomePageState extends State<HomePage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.person,
+              Icons.account_circle,
               size: 32,
             ),
-          ),
+          )
         ],
       ),
     );

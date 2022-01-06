@@ -164,7 +164,7 @@ Widget _itemOfUser(User user){
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              user.fullName,
+              user.fullname,
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(

@@ -2,12 +2,12 @@
 // ignore_for_file: must_be_immutable, invalid_use_of_visible_for_testing_member
 
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_instaclone/model/post_model.dart';
 import 'package:flutter_instaclone/services/data_service.dart';
 import 'package:flutter_instaclone/services/file_service.dart';
 import 'package:image_picker/image_picker.dart';
+
 class MyUploadPage extends StatefulWidget {
   PageController pageController;
 

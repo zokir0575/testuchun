@@ -1,9 +1,10 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Prefs{
-  static Future<bool> saveUserId(String userId) async {
+
+  static Future<bool> saveUserId(String user_id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString('user_id', userId);
+    return prefs.setString('user_id', user_id);
   }
 
   static Future<String> loadUserId() async {
@@ -16,10 +17,11 @@ class Prefs{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.remove('user_id');
   }
+
   // Firebase Token
-  static Future<bool> saveFCM(String fcmToken) async {
+  static Future<bool> saveFCM(String fcm_token) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.setString('fcm_token', fcmToken);
+    return prefs.setString('fcm_token', fcm_token);
   }
 
   static Future<String> loadFCM() async {
@@ -27,4 +29,5 @@ class Prefs{
     String token = prefs.getString('fcm_token');
     return token;
   }
+
 }

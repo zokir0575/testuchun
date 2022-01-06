@@ -111,7 +111,7 @@ class _MyLikesPageState extends State<MyLikesPage> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(post.fullName, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                        Text(post.fullname, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
                         Text( post.date, style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal),),
                       ],
                     ),
