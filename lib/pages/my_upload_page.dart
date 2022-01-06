@@ -10,7 +10,9 @@ import 'package:flutter_instaclone/services/file_service.dart';
 import 'package:image_picker/image_picker.dart';
 class MyUploadPage extends StatefulWidget {
   PageController pageController;
+
   MyUploadPage({this.pageController});
+
   @override
   _MyUploadPageState createState() => _MyUploadPageState();
 }
@@ -19,25 +21,27 @@ class _MyUploadPageState extends State<MyUploadPage> {
   bool isLoading = false;
   var captionController = TextEditingController();
   File _image;
+
   _imgFromGallery() async {
-    File image = (await  ImagePicker.platform.pickImage(
-        source: ImageSource.gallery, imageQuality: 50
-    )) as File;
+    File image = await ImagePicker.pickImage(
+        source: ImageSource.gallery, imageQuality: 50);
 
     setState(() {
       _image = image;
     });
   }
+
   _imgFromCamera() async {
-    File image = (await ImagePicker.platform.pickImage(
+    File image = await ImagePicker.pickImage(
         source: ImageSource.camera, imageQuality: 50
-    )) as File;
+    );
 
     setState(() {
       _image = image;
     });
   }
-  _showPicker(context) {
+
+  void _showPicker(context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -68,53 +72,62 @@ class _MyUploadPageState extends State<MyUploadPage> {
     );
   }
 
-  _uploadNewPost(){
-    setState(() {
-      isLoading = true;
-    });
+  _uploadNewPost() {
     String caption = captionController.text.toString().trim();
-    if(caption.isEmpty) return;
-    if(_image == null) return;
+    if (caption.isEmpty) return;
+    if (_image == null) return;
     _apiPostImage();
   }
 
-  void _apiPostImage(){
+  void  _apiPostImage(){
+    setState(() {
+      isLoading = true;
+    });
     FileService.uploadPostImage(_image).then((downloadUrl) => {
-      _respStorePost(downloadUrl)
+      _resPostImage(downloadUrl),
     });
   }
 
-  void _respStorePost(String downloadUrl){
+  void _resPostImage(String downloadUrl){
     String caption = captionController.text.toString().trim();
-    Post post = new Post(caption: caption, img_post: downloadUrl);
+    Post post = new Post(caption: caption,img_post: downloadUrl);
     _apiStorePost(post);
   }
 
-  void _apiStorePost (Post post)async{
+  void _apiStorePost(Post post) async{
+    // Post to posts
     Post posted = await DataService.storePost(post);
+    // Post to feeds
     DataService.storeFeed(posted).then((value) => {
-      _moveToFeed()
+      _moveToFeed(),
     });
-      }
+  }
+
   void _moveToFeed(){
     setState(() {
       isLoading = false;
     });
     captionController.text = "";
     _image = null;
-    widget.pageController.animateToPage(0, duration: Duration(milliseconds: 200), curve: Curves.easeIn);
+    widget.pageController.animateToPage(0,
+        duration: Duration(milliseconds: 200), curve: Curves.easeIn);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text("Upload", style: TextStyle(color: Colors.black, fontFamily: "Billabong", fontSize: 25),),
-        centerTitle: true,
+        title: Text(
+          "Upload",
+          style: TextStyle(
+              color: Colors.black, fontFamily: 'Billabong', fontSize: 25),
+        ),
         actions: [
           IconButton(
-            onPressed: (){
+            onPressed: () {
               _uploadNewPost();
             },
             icon: Icon(
@@ -126,88 +139,84 @@ class _MyUploadPageState extends State<MyUploadPage> {
       ),
       body: Stack(
         children: [
-          SafeArea(
-            child: Stack(
-              children: [
-                SingleChildScrollView(
-                  child: Column(children: [
-                    // Button : add a photo
-                    GestureDetector(
-                      onTap: () {
-                        _showPicker(context);
-                      },
-                      child: Container(
-                        width: double.infinity,
-                        height: MediaQuery.of(context).size.width,
-                        color: Colors.grey.withOpacity(0.4),
-                        child: _image == null
-                            ? Icon(
+
+          SingleChildScrollView(
+            child: Container(
+              height: MediaQuery.of(context).size.height,
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _showPicker(context);
+                    },
+                    child: Container(
+                      width: double.infinity,
+                      height: MediaQuery.of(context).size.width,
+                      color: Colors.grey.withOpacity(0.4),
+                      child: _image == null
+                          ? Center(
+                        child: Icon(
                           Icons.add_a_photo,
-                          color: Colors.grey,
                           size: 60,
-                        )
-                            : Stack(
-                          children: [
-                            // Added photo
-                            Container(
-                              height: double.infinity,
-                              width: double.infinity,
-                              child: Image.file(
-                                _image,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-
-                            // Button : x => remove added photo
-                            Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: Colors.black12.withOpacity(0.2),
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  IconButton(
-                                      icon: Icon(
-                                        Icons.highlight_remove,
-                                        color: Colors.white,
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _image = null;
-                                        });
-                                      }),
-                                ],
-                              ),
-                            ),
-                          ],
+                          color: Colors.grey,
                         ),
+                      )
+                          : Stack(
+                        children: [
+                          Image.file(
+                            _image,
+                            width: double.infinity,
+                            height: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
+                          Container(
+                            width: double.infinity,
+                            color: Colors.black12,
+                            padding: EdgeInsets.all(10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                IconButton(
+                                  onPressed: (){
+                                    setState(() {
+                                      _image = null;
+                                    });
+                                  },
+                                  icon: Icon(Icons.highlight_remove),
+                                  color: Colors.white,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-
-                    // TextField : Caption
-                    Container(
-                      margin: EdgeInsets.all(10),
-                      child: TextField(
-                        style: TextStyle(color: Colors.black),
-                        controller: captionController,
-                        decoration: InputDecoration(
-                          hintText: 'Caption',
-                          hintStyle: TextStyle(color: Colors.black38, fontSize: 17),
-                        ),
-                        keyboardType: TextInputType.multiline,
-                        minLines: 1,
-                        maxLines: 5,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(left: 10, right: 10, top: 10),
+                    child: TextField(
+                      controller: captionController,
+                      style: TextStyle(color: Colors.black),
+                      keyboardType: TextInputType.multiline,
+                      minLines: 1,
+                      //Normal textInputField will be displayed
+                      maxLines: 5,
+                      decoration: InputDecoration(
+                        hintText: "Caption",
+                        hintStyle: TextStyle(fontSize: 17.0, color: Colors.black38),
                       ),
                     ),
-                  ]),
-                ),          ],
+                  ),
+                ],
+              ),
             ),
           ),
-          isLoading ?
-              Center(
-                child: CircularProgressIndicator(),
-              ) : SizedBox.shrink(),
+
+          isLoading
+              ? Center(
+            child: CircularProgressIndicator(),
+          )
+              : SizedBox.shrink(),
         ],
       ),
     );
