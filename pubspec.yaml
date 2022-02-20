@@ -4,22 +4,22 @@ description: A new Flutter project.
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.11.0 <3.0.0"
+  sdk: ">=2.16.0-80.1.beta <3.0.0"
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.0
-  image_picker: ^0.6.6+5
+  cupertino_icons: ^1.0.2
+  image_picker: ^0.8.4+9
   flutter_icons: ^1.1.0
-  cached_network_image: ^2.5.0
-  fluttertoast: ^7.1.1
-  shared_preferences: ^0.5.12
-  firebase_core: ^0.4.4
-  firebase_auth: ^0.16.0
-  firebase_storage: ^3.1.6
-  cloud_firestore: ^0.13.5
-  device_info: ^2.0.0
+  cached_network_image: ^3.2.0
+  shared_preferences: ^2.0.13
+  fluttertoast: ^8.0.8
+  firebase_core: ^1.12.0
+  firebase_auth: ^3.3.7
+  firebase_storage: ^8.0.0
+  firebase_database: ^7.0.1
+  cloud_firestore: ^3.1.8
 
 dev_dependencies:
   flutter_test:

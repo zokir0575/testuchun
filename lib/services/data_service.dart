@@ -5,9 +5,9 @@ import 'package:flutter_instaclone/services/prefs_service.dart';
 import 'package:flutter_instaclone/services/utils_service.dart';
 
 
-class DataService {
-  static final _firestore = Firestore.instance;
 
+class DataService {
+  static final _firestore = FirebaseFirestore.instance;
   static String folder_users = "users";
   static String folder_posts = "posts";
   static String folder_feeds = "feeds";
@@ -16,59 +16,58 @@ class DataService {
 
   // User Related
 
-  static Future storeUser(User user) async {
-    user.uid = await Prefs.loadUserId();
-    Map<String, String> params = await Utils.deviceParams();
-    print(params.toString());
-
-    user.device_id = params["device_id"];
-    user.device_type = params["device_type"];
-    user.device_token = params["device_token"];
-
-    return _firestore.collection(folder_users).document(user.uid).setData(user.toJson());
+  static Future storeUser(User1 user) async {
+    user.uid = (await Prefs.loadUserId())!;
+    // Map<String, String> params = await Utils.deviceParams();
+    // print(params.toString());
+    //
+    // user.device_id = params["device_id"];
+    // user.device_type = params["device_type"];
+    // user.device_token = params["device_token"];
+    return _firestore.collection(folder_users).doc(user.uid).set(user.toJson());
   }
 
-  static Future<User> loadUser() async {
-    String uid = await Prefs.loadUserId();
-    var value = await _firestore.collection("users").document(uid).get();
-    User user = User.fromJson(value.data);
+  static Future<User1> loadUser() async {
+    String? uid = await Prefs.loadUserId();
+    var value = await _firestore.collection("users").doc(uid).get();
+    User1 user = User1.fromJson(value.data());
 
-    var querySnapshot1 = await _firestore.collection(folder_users).document(uid).collection(folder_followers).getDocuments();
-    user.followers_count = querySnapshot1.documents.length;
+    var querySnapshot1 = await _firestore.collection(folder_users).doc(uid).collection(folder_followers).get();
+    user.followers_count = querySnapshot1.docs.length;
 
-    var querySnapshot2 = await _firestore.collection(folder_users).document(uid).collection(folder_following).getDocuments();
-    user.following_count = querySnapshot2.documents.length;
+    var querySnapshot2 = await _firestore.collection(folder_users).doc(uid).collection(folder_following).get();
+    user.following_count = querySnapshot2.docs.length;
 
     return user;
   }
 
-  static Future updateUser(User user) async {
-    String uid = await Prefs.loadUserId();
-    return _firestore.collection(folder_users).document(uid).updateData(user.toJson());
+  static Future updateUser(User1 user) async {
+    String? uid = await Prefs.loadUserId();
+    return _firestore.collection(folder_users).doc(uid).update(user.toJson());
   }
 
-  static Future<List<User>> searchUsers(String keyword) async {
-    List<User> users = new List();
-    String uid = await Prefs.loadUserId();
+  static Future<List<User1>> searchUsers(String keyword) async {
+    List<User1> users = [];
+    String? uid = await Prefs.loadUserId();
 
-    var querySnapshot = await _firestore.collection(folder_users).orderBy("email").startAt([keyword]).getDocuments();
-    print(querySnapshot.documents.length);
+    var querySnapshot = await _firestore.collection(folder_users).orderBy("email").startAt([keyword]).get();
+    print(querySnapshot.docs.length);
 
-    querySnapshot.documents.forEach((result) {
-      User newUser = User.fromJson(result.data);
+    querySnapshot.docs.forEach((result) {
+      User1 newUser = User1.fromJson(result.data());
       if(newUser.uid != uid){
         users.add(newUser);
       }
     });
 
-    List<User> following = new List();
+    List<User1> following =  [];
 
-    var querySnapshot2 = await _firestore.collection(folder_users).document(uid).collection(folder_following).getDocuments();
-    querySnapshot2.documents.forEach((result) {
-      following.add(User.fromJson(result.data));
+    var querySnapshot2 = await _firestore.collection(folder_users).doc(uid).collection(folder_following).get();
+    querySnapshot2.docs.forEach((result) {
+      following.add(User1.fromJson(result.data()));
     });
 
-    for(User user in users){
+    for(User1 user in users){
       if(following.contains(user)){
         user.followed = true;
       }else{
@@ -79,114 +78,116 @@ class DataService {
     return users;
   }
 
-// Post Related
 
+
+// Post Related
+//
   static Future<Post> storePost(Post post) async {
-    User me = await loadUser();
+    User1 me = await loadUser();
     post.uid = me.uid;
     post.fullname = me.fullname;
     post.img_user = me.img_url;
     post.date = Utils.currentDate();
 
-    String postId = _firestore.collection(folder_users).document(me.uid).collection(folder_posts).document().documentID;
+    String postId = _firestore.collection(folder_users).doc(me.uid).collection(folder_posts).doc().id;
     post.id = postId;
 
-    await _firestore.collection(folder_users).document(me.uid).collection(folder_posts).document(postId).setData(post.toJson());
+    await _firestore.collection(folder_users).doc(me.uid).collection(folder_posts).doc(postId).set(post.toJson());
     return post;
   }
 
   static Future<Post> storeFeed(Post post) async {
-    String uid = await Prefs.loadUserId();
+    String? uid = await Prefs.loadUserId();
 
-    await _firestore.collection(folder_users).document(uid).collection(folder_feeds).document(post.id).setData(post.toJson());
+    await _firestore.collection(folder_users).doc(uid).collection(folder_feeds).doc(post.id).set(post.toJson());
     return post;
   }
 
+//
   static Future<List<Post>> loadFeeds() async {
-    List<Post> posts = new List();
-    String uid = await Prefs.loadUserId();
-    var querySnapshot = await _firestore.collection(folder_users).document(uid).collection(folder_feeds).getDocuments();
+    List<Post> posts = [];
+    String? uid = await Prefs.loadUserId();
+    var querySnapshot = await _firestore.collection(folder_users).doc(uid).collection(folder_feeds).get();
 
-    querySnapshot.documents.forEach((result) {
-      Post post = Post.fromJson(result.data);
-      if(post.uid == uid) post.mine = true;
+    querySnapshot.docs.forEach((result) {
+      Post post = Post.fromJson(result.data());
+      // if(post.uid == uid) post.mine = true;
       posts.add(post);
     });
     return posts;
   }
 
+//
   static Future<List<Post>> loadPosts() async {
-    List<Post> posts = new List();
-    String uid = await Prefs.loadUserId();
+    List<Post> posts = [];
+    String? uid = await Prefs.loadUserId();
 
-    var querySnapshot = await _firestore.collection(folder_users).document(uid).collection(folder_posts).getDocuments();
+    var querySnapshot = await _firestore.collection(folder_users).doc(uid).collection(folder_posts).get();
 
-    querySnapshot.documents.forEach((result) {
-      posts.add(Post.fromJson(result.data));
+    querySnapshot.docs.forEach((result) {
+      posts.add(Post.fromJson(result.data()));
     });
     return posts;
   }
-
-
-  static Future<Post> likePost(Post post, bool liked) async {
-    String uid = await Prefs.loadUserId();
+//
+//
+  static Future<Post?> likePost(Post post, bool liked) async {
+    String? uid = await Prefs.loadUserId();
     post.liked = liked;
 
-    await _firestore.collection(folder_users).document(uid).collection(folder_feeds).document(post.id).setData(post.toJson());
+    await _firestore.collection(folder_users).doc(uid).collection(folder_feeds).doc(post.id).set(post.toJson());
 
     if(uid == post.uid){
-      await _firestore.collection(folder_users).document(uid).collection(folder_posts).document(post.id).setData(post.toJson());
+      await _firestore.collection(folder_users).doc(uid).collection(folder_posts).doc(post.id).set(post.toJson());
     }
   }
-
   static Future<List<Post>> loadLikes() async {
-    String uid = await Prefs.loadUserId();
-    List<Post> posts = new List();
-
-    var querySnapshot = await _firestore.collection(folder_users).document(uid).collection(folder_feeds).where("liked", isEqualTo: true).getDocuments();
-
-    querySnapshot.documents.forEach((result) {
-      Post post = Post.fromJson(result.data);
-      if(post.uid == uid) post.mine = true;
+    String? uid = await Prefs.loadUserId();
+    List<Post> posts = [];
+    var querySnapshot = await _firestore.collection(folder_users).doc(uid).collection(folder_feeds).where("liked", isEqualTo: true).get();
+    querySnapshot.docs.forEach((result) {
+      Post post = Post.fromJson(result.data());
+      // if(post.uid == uid) post.mine = true;
       posts.add(post);
     });
     return posts;
 
   }
 
-  // Follower and Following Related
-
-  static Future<User> followUser(User someone) async {
-    User me = await loadUser();
+//
+//   // Follower and Following Related
+//
+  static Future<User1> followUser(User1 someone) async {
+    User1 me = await loadUser();
 
     // I followed to someone
-    await _firestore.collection(folder_users).document(me.uid).collection(folder_following).document(someone.uid).setData(someone.toJson());
+    await _firestore.collection(folder_users).doc(me.uid).collection(folder_following).doc(someone.uid).set(someone.toJson());
 
     // I am in someone`s followers
-    await _firestore.collection(folder_users).document(someone.uid).collection(folder_followers).document(me.uid).setData(me.toJson());
+    await _firestore.collection(folder_users).doc(someone.uid).collection(folder_followers).doc(me.uid).set(me.toJson());
 
     return someone;
   }
 
-  static Future<User> unfollowUser(User someone) async {
-    User me = await loadUser();
+  static Future<User1> unfollowUser(User1 someone) async {
+    User1 me = await loadUser();
 
     // I un followed to someone
-    await _firestore.collection(folder_users).document(me.uid).collection(folder_following).document(someone.uid).delete();
+    await _firestore.collection(folder_users).doc(me.uid).collection(folder_following).doc(someone.uid).delete();
 
     // I am not in someone`s followers
-    await _firestore.collection(folder_users).document(someone.uid).collection(folder_followers).document(me.uid).delete();
+    await _firestore.collection(folder_users).doc(someone.uid).collection(folder_followers).doc(me.uid).delete();
 
     return someone;
   }
 
-  static Future storePostsToMyFeed(User someone) async{
+  static Future storePostsToMyFeed(User1 someone) async{
     // Store someone`s posts to my feed
 
-    List<Post> posts = new List();
-    var querySnapshot = await _firestore.collection(folder_users).document(someone.uid).collection(folder_posts).getDocuments();
-    querySnapshot.documents.forEach((result) {
-      var post = Post.fromJson(result.data);
+    List<Post> posts = [];
+    var querySnapshot = await _firestore.collection(folder_users).doc(someone.uid).collection(folder_posts).get();
+    querySnapshot.docs.forEach((result) {
+      var post = Post.fromJson(result.data());
       post.liked = false;
       posts.add(post);
     });
@@ -196,13 +197,14 @@ class DataService {
     }
   }
 
-  static Future removePostsFromMyFeed(User someone) async{
+
+  static Future removePostsFromMyFeed(User1 someone) async{
     // Remove someone`s posts from my feed
 
-    List<Post> posts = new List();
-    var querySnapshot = await _firestore.collection(folder_users).document(someone.uid).collection(folder_posts).getDocuments();
-    querySnapshot.documents.forEach((result) {
-      posts.add(Post.fromJson(result.data));
+    List<Post> posts = [];
+    var querySnapshot = await _firestore.collection(folder_users).doc(someone.uid).collection(folder_posts).get();
+    querySnapshot.docs.forEach((result) {
+      posts.add(Post.fromJson(result.data()));
     });
 
     for(Post post in posts){
@@ -211,16 +213,15 @@ class DataService {
   }
 
   static Future removeFeed(Post post) async{
-    String uid = await Prefs.loadUserId();
+    String? uid = await Prefs.loadUserId();
 
-    return await _firestore.collection(folder_users).document(uid).collection(folder_feeds).document(post.id).delete();
+    return await _firestore.collection(folder_users).doc(uid).collection(folder_feeds).doc(post.id).delete();
   }
 
   static Future removePost(Post post) async{
-    String uid = await Prefs.loadUserId();
+    String? uid = await Prefs.loadUserId();
     await removeFeed(post);
-    return await _firestore.collection(folder_users).document(uid)
-        .collection(folder_posts).document(post.id).delete();
+    return await _firestore.collection(folder_users).doc(uid)
+        .collection(folder_posts).doc(post.id).delete();
   }
-
 }

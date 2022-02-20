@@ -9,7 +9,7 @@ import 'package:flutter_instaclone/services/utils_service.dart';
 
 import 'home_page.dart';
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({Key key}) : super(key: key);
+  const SignUpPage({Key? key}) : super(key: key);
  static final String id = "signUp_page";
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -21,41 +21,31 @@ class _SignUpPageState extends State<SignUpPage> {
   var passwordController = TextEditingController();
   var cpasswordController = TextEditingController();
   var isLoading = false;
-  _callSignInPage(){
-    Navigator.pushReplacementNamed(context, SignInPage.id);
-  }
-
   _doSignUp() {
-    String name = fullnameController.text.toString().trim();
+    String fullName = fullnameController.text.toString().trim();
     String email = emailController.text.toString().trim();
     String password = passwordController.text.toString().trim();
-    String cpassword = cpasswordController.text.toString().trim();
-
-    if (name.isEmpty || email.isEmpty || password.isEmpty) return;
-    if (cpassword != password) {
+    String cpassword= cpasswordController.text.toString().trim();
+    if (fullName.isEmpty || email.isEmpty || password.isEmpty) return;
+    if(cpassword!=password) {
       Utils.fireToast("Password and confirm password does not match");
       return;
     }
-    // email validation
-
-    // password validation
-
     setState(() {
-      isLoading = true;
+      isLoading=true;
     });
-    User user = new User(fullname: name, email: email, password: password);
-    AuthService.signUpUser(context, name, email, password).then((
-        value) =>
-    {
-      _getFirebaseUser(user, value),
+    User1 user1=User1(fullname: fullName, email: email, password: password);
+    AuthService.signUpUser(context, fullName, email, password).then((user) => {
+      _getFirebaseUser(user1, user),
     });
+
   }
+  _getFirebaseUser( User1? user1, Map<String,User?> map) async {
 
-  _getFirebaseUser(User user, Map<String, FirebaseUser> map) async {
     setState(() {
-      isLoading = false;
+      isLoading=false;
     });
-    FirebaseUser firebaseUser;
+    User? user;
     if (!map.containsKey("SUCCESS")) {
       if (map.containsKey("ERROR_EMAIL_ALREADY_IN_USE"))
         Utils.fireToast("Email already in use");
@@ -63,15 +53,20 @@ class _SignUpPageState extends State<SignUpPage> {
         Utils.fireToast("Try again later");
       return;
     }
-    firebaseUser = map["SUCCESS"];
-    if (firebaseUser == null) return;
-
-    await Prefs.saveUserId(firebaseUser.uid);
-    DataService.storeUser(user).then((value) => {
-      Navigator.pushReplacementNamed(context, HomePage.id),
-    });
+    user = map["SUCCESS"];
+    if (user == null) return;
+    if (user != null) {
+      await Prefs.saveUserId(user.uid);
+      DataService.storeUser(user1!).then((value) => {
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) =>  HomePage())),
+      });
+    }
   }
 
+  _callSignInPage(){
+    Navigator.pushReplacementNamed(context, SignInPage.id);
+  }
   @override 
   Widget build(BuildContext context) {
     return Scaffold(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_instaclone/model/user_model.dart';
 import 'package:flutter_instaclone/services/data_service.dart';
 class MySearchPage extends StatefulWidget {
-  const MySearchPage({Key key}) : super(key: key);
+  const MySearchPage({Key? key}) : super(key: key);
 
   @override
   _MySearchPageState createState() => _MySearchPageState();
@@ -10,7 +10,7 @@ class MySearchPage extends StatefulWidget {
 
 class _MySearchPageState extends State<MySearchPage> {  bool isLoading = false;
 var searchController = TextEditingController();
-List<User> items = [];
+List<User1> items = [];
 
 void _apiSearchUsers(String keyword){
   setState(() {
@@ -21,14 +21,14 @@ void _apiSearchUsers(String keyword){
   });
 }
 
-void  _respSearchUsers(List<User> users){
+void  _respSearchUsers(List<User1> users){
   setState(() {
     items = users;
     isLoading = false;
   });
 }
 
-void _apiFollowUser(User someone) async{
+void _apiFollowUser(User1 someone) async{
   setState(() {
     isLoading = true;
   });
@@ -40,7 +40,7 @@ void _apiFollowUser(User someone) async{
   DataService.storePostsToMyFeed(someone);
 }
 
-void _apiUnfollowUser(User someone) async{
+void _apiUnfollowUser(User1 someone) async{
   setState(() {
     isLoading = true;
   });
@@ -126,7 +126,7 @@ Widget build(BuildContext context) {
   );
 }
 
-Widget _itemOfUser(User user){
+Widget _itemOfUser(User1 user){
   return Container(
     height: 90,
     child: Row(
@@ -143,13 +143,13 @@ Widget _itemOfUser(User user){
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(22.5),
-            child: user.img_url.isEmpty ? Image(
+            child: user.img_url!.isEmpty ? Image(
               image: AssetImage("assets/images/ic_person.png"),
               width: 45,
               height: 45,
               fit: BoxFit.cover,
             ): Image.network(
-              user.img_url,
+              user.img_url!,
               width: 45,
               height: 45,
               fit: BoxFit.cover,
@@ -159,29 +159,30 @@ Widget _itemOfUser(User user){
         SizedBox(
           width: 15,
         ),
-        Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              user.fullname,
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 3,
-            ),
-            Text(
-              user.email,
-              style: TextStyle(color: Colors.black54),
-            ),
-          ],
+        Expanded(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                user.fullname!,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 3,
+              ),
+              Text(
+                user.email!,
+                style: TextStyle(color: Colors.black54),
+              ),
+            ],
+          ),
         ),
 
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-
               GestureDetector(
                 onTap: (){
                   if(user.followed){
@@ -205,11 +206,9 @@ Widget _itemOfUser(User user){
                   ),
                 ),
               ),
-
             ],
           ),
         ),
-
       ],
     ),
   );

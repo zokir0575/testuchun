@@ -9,7 +9,7 @@ import 'package:flutter_instaclone/services/utils_service.dart';
 class MyFeedPage extends StatefulWidget {
 
   PageController pageController;
-  MyFeedPage({this.pageController});
+  MyFeedPage({required this.pageController});
 
   @override
   _MyFeedPageState createState() => _MyFeedPageState();
@@ -17,7 +17,7 @@ class MyFeedPage extends StatefulWidget {
 
 class _MyFeedPageState extends State<MyFeedPage> {
   bool isLoading = false;
-  List<Post> items = new List();
+  List<Post> items = [];
 
   void _apiLoadFeeds() {
     setState(() {
@@ -134,13 +134,13 @@ class _MyFeedPageState extends State<MyFeedPage> {
                   children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(40),
-                      child: (post.img_user == null || post.img_user.isEmpty)? Image(
+                      child: (post.img_user == null || post.img_user!.isEmpty)? Image(
                         image: AssetImage("assets/images/ic_person.png"),
                         width: 40,
                         height: 40,
                         fit: BoxFit.cover,
                       ):Image.network(
-                        post.img_user,
+                        post.img_user!,
                         width: 40,
                         height: 40,
                         fit: BoxFit.cover,
@@ -151,12 +151,12 @@ class _MyFeedPageState extends State<MyFeedPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          post.fullname,
+                          post.fullname!,
                           style: TextStyle(
                               fontWeight: FontWeight.bold, color: Colors.black),
                         ),
                         Text(
-                          post.date,
+                          post.date!,
                           style: TextStyle(fontWeight: FontWeight.normal),
                         ),
                       ],
@@ -179,7 +179,7 @@ class _MyFeedPageState extends State<MyFeedPage> {
           CachedNetworkImage(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width,
-            imageUrl: post.img_post,
+            imageUrl: post.img_post!,
             placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
             errorWidget: (context, url, error) => Icon(Icons.error),
             fit: BoxFit.cover,

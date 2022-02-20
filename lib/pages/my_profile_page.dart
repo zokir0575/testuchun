@@ -17,125 +17,117 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
-  bool isLoading = false;
+  bool isLoading= false;
+  String fullName = "", email = "", img_url = "";
   int axisCount = 1;
-  List<Post> items = new List();
-  File _image;
-  String fullname = "", email = "", img_url = "";
+  List<Post> items= [];
+  File? _image;
   int count_posts = 0, count_followers = 0, count_following = 0;
 
+  var captionController= TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+
   _imgFromGallery() async {
-    File image = await ImagePicker.pickImage(
-        source: ImageSource.gallery, imageQuality: 50);
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
 
     setState(() {
-      _image = image;
+      _image = File(image!.path);
     });
     _apiChangePhoto();
   }
-
   _imgFromCamera() async {
-    File image = await ImagePicker.pickImage(
-        source: ImageSource.camera, imageQuality: 50);
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera, imageQuality: 50);
 
     setState(() {
-      _image = image;
+      _image = File(image!.path);
     });
     _apiChangePhoto();
   }
-
-  void _apiChangePhoto() {
-    if (_image == null) return;
+  _apiChangePhoto(){
+    if(_image==null) return;
     setState(() {
-      isLoading = true;
+      isLoading=true;
     });
 
-    FileService.uploadUserImage(_image).then((downloadUrl) => {
-      _apiUpdateUser(downloadUrl),
+    FileService.uploadUserImage(_image!).then((downloadUrl) => {
+      _apiUpdateUser(downloadUrl!),
+
     });
   }
+  _apiUpdateUser(String downloadUrl) async{
 
-  void _apiUpdateUser(String downloadUrl) async {
-    User user = await DataService.loadUser();
-    user.img_url = downloadUrl;
-    await DataService.updateUser(user);
+    User1 user1= await DataService.loadUser();
+    user1.img_url=downloadUrl;
+    await DataService.updateUser(user1);
     _apiLoadUser();
   }
-
-  void _showPicker(context) {
+  _showPicker(context) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
           return SafeArea(
-            child: Container(
-              child: new Wrap(
-                children: <Widget>[
-                  new ListTile(
-                      leading: new Icon(Icons.photo_library),
-                      title: new Text('Pick Photo'),
-                      onTap: () {
-                        _imgFromGallery();
-                        Navigator.of(context).pop();
-                      }),
-                  new ListTile(
-                    leading: new Icon(Icons.photo_camera),
-                    title: new Text('Take Photo'),
+            child: Wrap(
+              children: <Widget>[
+                ListTile(
+                    leading: const Icon(Icons.photo_library),
+                    title: const Text('Photo Library'),
                     onTap: () {
-                      _imgFromCamera();
+                      _imgFromGallery();
                       Navigator.of(context).pop();
-                    },
-                  ),
-                ],
-              ),
+                    }),
+                ListTile(
+                  leading: const Icon(Icons.photo_camera),
+                  title: const Text('Camera'),
+                  onTap: () {
+                    _imgFromCamera();
+                    Navigator.of(context).pop();
+                  },
+                ),
+              ],
             ),
           );
-        });
+        }
+    );
   }
-
-  void _apiLoadUser() {
+  _apiLoadUser(){
     setState(() {
-      isLoading = true;
+      isLoading=true;
     });
     DataService.loadUser().then((value) => {
       _showUserInfo(value),
     });
   }
-
-  void _showUserInfo(User user) {
+  _showUserInfo(User1 user1){
     setState(() {
-      isLoading = false;
-      this.fullname = user.fullname;
-      this.email = user.email;
-      this.img_url = user.img_url;
-      this.count_followers = user.followers_count;
-      this.count_following = user.following_count;
+      isLoading=false;
+      fullName=user1.fullname!;
+      email=user1.email!;
+      img_url=user1.img_url!;
     });
   }
 
-  void _apiLoadPosts() {
-    DataService.loadPosts().then((value) => {
+  _apiLoadPosts(){
+    DataService.loadPosts().then((value)=>{
       _resLoadPosts(value),
     });
   }
-
-  void _resLoadPosts(List<Post> posts) {
+  _resLoadPosts(List<Post> posts){
     setState(() {
-      items = posts;
-      count_posts = items.length;
+      items=posts;
+      count_posts=items.length;
     });
   }
-
   _actionLogout() async{
 
     var result = await Utils.dialogCommon(context, "Insta Clone", "Do you want to logout?", false);
-    if(result != null && result){
+    if(result){
       AuthService.signOutUser(context);
     }
   }
 
   _actionRemovePost(Post post) async{
     var result = await Utils.dialogCommon(context, "Insta Clone", "Do you want to remove this post?", false);
-    if(result != null && result){
+    if(result){
       setState(() {
         isLoading = true;
       });
@@ -144,12 +136,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
       });
     }
   }
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-
     _apiLoadUser();
     _apiLoadPosts();
   }
@@ -201,7 +191,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                         ),
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(35),
-                          child: img_url == null || img_url.isEmpty
+                          child: img_url.isEmpty
                               ? Image(
                             image: AssetImage("assets/images/ic_person.png"),
                             width: 70,
@@ -238,7 +228,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   height: 10,
                 ),
                 Text(
-                  fullname.toUpperCase(),
+                  fullName.toUpperCase(),
                   style: TextStyle(
                       color: Colors.black,
                       fontSize: 16,
@@ -418,7 +408,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               Expanded(
                 child: CachedNetworkImage(
                   width: double.infinity,
-                  imageUrl: post.img_post,
+                  imageUrl: post.img_post!,
                   placeholder: (context, url) => Center(child: CircularProgressIndicator(),),
                   errorWidget: (context, url, error) => Icon(Icons.error),
                   fit: BoxFit.cover,
@@ -428,7 +418,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 height: 3,
               ),
               Text(
-                post.caption,
+                post.caption!,
                 style: TextStyle(color: Colors.black87.withOpacity(0.7)),
                 maxLines: 2,
               ),

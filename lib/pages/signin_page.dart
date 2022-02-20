@@ -7,7 +7,7 @@ import 'package:flutter_instaclone/services/prefs_service.dart';
 import 'package:flutter_instaclone/services/utils_service.dart';
 
 class SignInPage extends StatefulWidget {
-  const SignInPage({Key key}) : super(key: key);
+  const SignInPage({Key? key}) : super(key: key);
   static final String id = "signIn_page";
   @override
   _SignInPageState createState() => _SignInPageState();
@@ -30,21 +30,20 @@ class _SignInPageState extends State<SignInPage> {
     String email = emailController.text.toString().trim();
     String password = passwordController.text.toString().trim();
     if (email.isEmpty || password.isEmpty) return;
-
     setState(() {
-      isLoading = true;
+      isLoading=true;
     });
-    AuthService.signInUser(context, email, password).then((value) =>
-    {
-      _getFirebaseUser(value),
+
+    AuthService.signInUser(context, email, password).then((user) => {
+      _getFirebaseUser(user),
     });
   }
 
-  _getFirebaseUser(Map<String, FirebaseUser> map) async {
+  _getFirebaseUser(Map<String, User?> map) async {
     setState(() {
       isLoading = false;
     });
-    FirebaseUser firebaseUser;
+    User? firebaseUser;
     if (!map.containsKey("SUCCESS")) {
       if (map.containsKey("ERROR"))
         Utils.fireToast("Check your email or password");

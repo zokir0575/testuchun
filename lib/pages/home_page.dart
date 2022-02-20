@@ -1,3 +1,4 @@
+// @dart=2.9
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_instaclone/pages/my_feed_page.dart';
@@ -44,7 +45,6 @@ class _HomePageState extends State<HomePage> {
           });
         },
       ),
-
       bottomNavigationBar: CupertinoTabBar(
         onTap: (int index){
           setState(() {

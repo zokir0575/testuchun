@@ -1,22 +1,22 @@
-class User {
-  String uid = "";
-  String fullname = "";
-  String email = "";
-  String password = "";
-  String img_url = "";
+class User1 {
+  String? uid = "";
+  String? fullname = "";
+  String? email = "";
+  String? password = "";
+  String? img_url = "";
 
-  String device_id = "";
-  String device_type = "";
-  String device_token = "";
+  String? device_id = "";
+  String? device_type = "";
+  String? device_token = "";
 
   bool followed = false;
   int followers_count = 0;
   int following_count = 0;
 
-  User({this.fullname, this.email, this.password});
+  User1({required this.fullname, required this.email, required this.password});
 
-  User.fromJson(Map<String, dynamic> json)
-      : uid = json['uid'],
+  User1.fromJson(Map<String, dynamic>? json)
+      : uid = json!['uid'],
         fullname = json['fullname'],
         email = json['email'],
         password = json['password'],
@@ -38,6 +38,6 @@ class User {
 
   @override
   bool operator ==(other) {
-    return (other is User) && other.uid == uid;
+    return (other is User1) && other.uid == uid;
   }
 }

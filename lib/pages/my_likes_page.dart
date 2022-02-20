@@ -5,7 +5,7 @@ import 'package:flutter_instaclone/model/post_model.dart';
 import 'package:flutter_instaclone/services/data_service.dart';
 import 'package:flutter_instaclone/services/utils_service.dart';
 class MyLikesPage extends StatefulWidget {
-  const MyLikesPage({Key key}) : super(key: key);
+  const MyLikesPage({Key? key}) : super(key: key);
 
   @override
   _MyLikesPageState createState() => _MyLikesPageState();
@@ -111,8 +111,8 @@ class _MyLikesPageState extends State<MyLikesPage> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Text(post.fullname, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
-                        Text( post.date, style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal),),
+                        Text(post.fullname!, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),),
+                        Text( post.date!, style: TextStyle(color: Colors.black, fontWeight: FontWeight.normal),),
                       ],
                     ),
                   ],
@@ -130,7 +130,7 @@ class _MyLikesPageState extends State<MyLikesPage> {
           CachedNetworkImage(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.width,
-            imageUrl: post.img_post,
+            imageUrl: post.img_post!,
             placeholder: (context, url) => CircularProgressIndicator(),
             errorWidget: (context, url, error) => Icon(Icons.error),
           ),          //#like share

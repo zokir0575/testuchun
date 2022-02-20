@@ -1,16 +1,16 @@
 class Post {
-  String uid;
-  String fullname;
-  String img_user;
-  String id;
-  String img_post;
-  String caption;
-  String date;
+  String? uid;
+  String? fullname;
+  String? img_user;
+  String? id;
+  String? img_post;
+  String? caption;
+  String? date;
   bool liked = false;
 
   bool mine = false;
 
-  Post({this.img_post, this.caption});
+  Post({required this.img_post, required this.caption});
 
   Post.fromJson(Map<String, dynamic> json)
       : uid = json['uid'],
